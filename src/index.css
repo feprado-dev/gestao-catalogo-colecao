@@ -16,7 +16,7 @@
   --overlay-strong: rgba(0, 0, 0, 0.97);
   --hero-glow: #1a1a1a;
 
-  --font: 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font: 'Inter Variable', 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
   --radius: 8px;
   --header-h: 56px;
   --gutter: clamp(1rem, 1.6vw, 1.75rem);
@@ -34,7 +34,7 @@
   --border-strong: #cfcfca;
   --text: #111111;
   --muted: #6b6b6b;
-  --accent: #d6336c;
+  --accent: #bd1f58;
   --danger: #d92d20;
   --danger-text: #b42318;
   --overlay: rgba(255, 255, 255, 0.75);

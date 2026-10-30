@@ -7,10 +7,12 @@ import { ViewModeToggle } from '../components/ViewModeToggle'
 import { useViewMode } from '../hooks/useViewMode'
 import { listPublicMagazines } from '../lib/magazineService'
 import { applyFilters, defaultFilters, type Filters } from '../lib/filters'
+import { useDocumentTitle } from '../hooks/useDocumentTitle'
 import type { Magazine } from '../types'
 
 // Página aberta a qualquer visitante: não usa useSession, não pede login.
 export function PublicCatalog() {
+  useDocumentTitle('Catálogo público')
   const [magazines, setMagazines] = useState<Magazine[]>([])
   const [error, setError] = useState<string | null>(null)
   const [filters, setFilters] = useState<Filters>(defaultFilters)
@@ -28,7 +30,8 @@ export function PublicCatalog() {
     <div className="container">
       <header className="page-head">
         <p className="eyebrow">Acervo aberto</p>
-        <h1></h1>
+        {/* sr-only: continua invisível na tela, mas leitores de tela têm o título da página */}
+        <h1 className="sr-only">Catálogo público</h1>
       </header>
 
       <p className="subtitle">{visibleMagazines.length} de {magazines.length} revistas públicas</p>

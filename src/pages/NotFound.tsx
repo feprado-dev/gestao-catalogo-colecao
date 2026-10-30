@@ -1,6 +1,8 @@
 import { Link } from 'react-router-dom'
+import { useDocumentTitle } from '../hooks/useDocumentTitle'
 
 export function NotFound() {
+  useDocumentTitle('Página não encontrada')
   return (
     <div className="container">
       <header className="page-head">

@@ -1,6 +1,8 @@
 import { Link } from 'react-router-dom'
+import { useDocumentTitle } from '../hooks/useDocumentTitle'
 
 export function Home() {
+  useDocumentTitle()
   return (
     <section className="hero">
       <p className="hero__eyebrow">Coleção de revistas</p>

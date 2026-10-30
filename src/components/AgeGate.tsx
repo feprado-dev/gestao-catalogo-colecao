@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { useFocusTrap } from '../hooks/useFocusTrap'
 
 const STORAGE_KEY = 'idade-confirmada'
 
@@ -27,16 +28,23 @@ export function AgeGate() {
     setConfirmed(true)
   }
 
+  return <AgeGateBox onConfirm={confirm} />
+}
+
+// Separado para o foco do teclado ficar preso aqui dentro enquanto o aviso estiver aberto.
+function AgeGateBox({ onConfirm }: { onConfirm: () => void }) {
+  const boxRef = useFocusTrap<HTMLDivElement>()
+
   return (
     <div className="agegate" role="dialog" aria-modal="true" aria-labelledby="agegate-title">
-      <div className="agegate__box">
+      <div className="agegate__box" ref={boxRef}>
         <p className="eyebrow">Conteúdo adulto</p>
         <h2 id="agegate-title">Você tem 18 anos ou mais?</h2>
         <p className="agegate__text">
           Este site exibe capas de revistas com nudez artística. O acesso é destinado a maiores de 18 anos.
         </p>
         <div className="dialog__actions">
-          <button autoFocus onClick={confirm}>Tenho 18 anos ou mais</button>
+          <button autoFocus onClick={onConfirm}>Tenho 18 anos ou mais</button>
           <a className="btn" href="https://www.google.com">Sair</a>
         </div>
       </div>

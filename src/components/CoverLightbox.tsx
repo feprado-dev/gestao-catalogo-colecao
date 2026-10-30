@@ -1,4 +1,5 @@
 import { useEffect, useRef } from 'react'
+import { useFocusTrap } from '../hooks/useFocusTrap'
 import type { Magazine } from '../types'
 
 interface CoverLightboxProps {
@@ -12,6 +13,7 @@ interface CoverLightboxProps {
 // Dá para andar para os lados com as setas do teclado, os botões ou deslizando o dedo.
 export function CoverLightbox({ magazine, magazines, onChange, onClose }: CoverLightboxProps) {
   // Só as revistas COM capa entram na navegação.
+  const dialogRef = useFocusTrap<HTMLDivElement>()
   const withCover = magazines.filter((m) => m.cover_image_url)
   const index = withCover.findIndex((m) => m.id === magazine.id)
   const previous = index > 0 ? withCover[index - 1] : null
@@ -54,6 +56,7 @@ export function CoverLightbox({ magazine, magazines, onChange, onClose }: CoverL
     // Clicar no fundo fecha; clicar na imagem ou nas setas não (não "vazam" o clique).
     <div
       className="lightbox"
+      ref={dialogRef}
       role="dialog"
       aria-modal="true"
       aria-label={`Capa de ${magazine.title}`}

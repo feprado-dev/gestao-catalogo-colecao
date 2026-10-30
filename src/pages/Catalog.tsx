@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useDocumentTitle } from "../hooks/useDocumentTitle";
 import { MagazineCard } from "../components/MagazineCard";
 import { MagazineForm } from "../components/MagazineForm";
 import { ConfirmDialog } from "../components/ConfirmDialog";
@@ -26,6 +27,7 @@ import { applyFilters, defaultFilters, type Filters } from "../lib/filters";
 import type { Magazine } from "../types";
 
 export function Catalog() {
+  useDocumentTitle("Minha coleção");
   const { session, loading } = useSession();
   const userId = session?.user.id;
 
