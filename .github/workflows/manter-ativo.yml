@@ -1,0 +1,29 @@
+# O plano gratuito do Supabase PAUSA o projeto depois de ~7 dias sem atividade.
+# Este robô faz uma consulta bem leve a cada 3 dias, para o projeto nunca ficar parado.
+name: Manter o Supabase ativo
+
+on:
+  schedule:
+    - cron: '17 9 */3 * *' # a cada 3 dias, às 09:17 UTC
+  workflow_dispatch: # permite rodar na mão, pelo botão "Run workflow" na aba Actions
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Consulta leve ao banco (view pública, 1 linha)
+        env:
+          SUPABASE_URL: https://hqqnnxnbxqfocsmrovmw.supabase.co
+          # Chave PÚBLICA (anon). Fica em Settings > Secrets and variables > Actions.
+          SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
+        run: |
+          if [ -z "$SUPABASE_ANON_KEY" ]; then
+            echo "::error::Falta o secret SUPABASE_ANON_KEY no GitHub."
+            exit 1
+          fi
+          code=$(curl -s -o /dev/null -w "%{http_code}" \
+            "$SUPABASE_URL/rest/v1/public_magazines?select=id&limit=1" \
+            -H "apikey: $SUPABASE_ANON_KEY" \
+            -H "Authorization: Bearer $SUPABASE_ANON_KEY")
+          echo "Resposta do Supabase: HTTP $code"
+          [ "$code" = "200" ]
