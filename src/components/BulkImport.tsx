@@ -137,15 +137,21 @@ export function BulkImport({ userId, existing, onImported }: BulkImportProps) {
     <div className="bulk">
       <label>
         Escolha várias capas (imagens, até {MAX_COVER_MB} MB cada)
-        <input key={inputKey} type="file" accept="image/*" multiple disabled={running} onChange={handleFiles} />
+        <input
+          key={inputKey}
+          type="file"
+          accept="image/png,image/jpeg,image/webp,image/avif,image/gif"
+          multiple
+          disabled={running}
+          onChange={handleFiles}
+        />
       </label>
       <p className="card__meta">
-        Dica: nomeie assim e o app preenche tudo: <code>99__12__Playboy-No-293-Joana-Prado.jpg</code> (ano, mês, edição e nome).
+        Dica: nomeie assim e o app preenche tudo: <code>99__12__Playboy-No-293-Joana-Prado.jpg</code> (ano, mês, edição
+        e nome).
       </p>
 
-      {skipped.length > 0 && (
-        <p className="form__error">Não incluídas: {skipped.join('; ')}</p>
-      )}
+      {skipped.length > 0 && <p className="form__error">Não incluídas: {skipped.join('; ')}</p>}
 
       {items.length > 0 && (
         <>
@@ -161,7 +167,10 @@ export function BulkImport({ userId, existing, onImported }: BulkImportProps) {
                     onChange={(e) => update(item.id, { title: e.target.value })}
                   />
                   <span className="card__meta">
-                    {[item.issue && `Nº ${item.issue}`, item.year && `${item.month ? `${String(item.month).padStart(2, '0')}/` : ''}${item.year}`]
+                    {[
+                      item.issue && `Nº ${item.issue}`,
+                      item.year && `${item.month ? `${String(item.month).padStart(2, '0')}/` : ''}${item.year}`,
+                    ]
                       .filter(Boolean)
                       .join(' · ') || 'sem edição nem data'}
                   </span>
@@ -174,9 +183,13 @@ export function BulkImport({ userId, existing, onImported }: BulkImportProps) {
 
           <div className="bulk__actions">
             <button type="button" onClick={runImport} disabled={running || pending === 0}>
-              {running ? `Enviando... (${done}/${items.length})` : `Importar ${pending} ${pending === 1 ? 'revista' : 'revistas'}`}
+              {running
+                ? `Enviando... (${done}/${items.length})`
+                : `Importar ${pending} ${pending === 1 ? 'revista' : 'revistas'}`}
             </button>
-            <button type="button" onClick={clearAll} disabled={running}>Limpar lista</button>
+            <button type="button" onClick={clearAll} disabled={running}>
+              Limpar lista
+            </button>
             {items.some((i) => i.status === 'duplicada') && (
               <span className="card__meta">As marcadas como "Já existe" não serão enviadas.</span>
             )}

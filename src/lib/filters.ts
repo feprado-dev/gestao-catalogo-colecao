@@ -12,7 +12,10 @@ export const defaultFilters: Filters = { search: '', condition: 'todas', status:
 
 // Remove acentos e põe em minúsculas: "Edição" e "edicao" passam a ser iguais na busca.
 function normalize(text: string): string {
-  return text.normalize('NFD').replace(/\p{Diacritic}/gu, '').toLowerCase()
+  return text
+    .normalize('NFD')
+    .replace(/\p{Diacritic}/gu, '')
+    .toLowerCase()
 }
 
 // FUNÇÃO PURA: mesma entrada → sempre a mesma saída, e não altera nada fora dela.
@@ -31,9 +34,13 @@ export function applyFilters(magazines: Magazine[], filters: Filters): Magazine[
   // .filter() já devolveu uma lista NOVA, então ordenar aqui não mexe na original.
   switch (filters.sort) {
     // "?? 0" e "?? 9999" mandam as revistas sem ano para o fim da lista, nas duas direções.
-    case 'ano-desc': return filtered.sort((a, b) => (b.year ?? 0) - (a.year ?? 0) || (b.month ?? 0) - (a.month ?? 0))
-    case 'ano-asc': return filtered.sort((a, b) => (a.year ?? 9999) - (b.year ?? 9999) || (a.month ?? 99) - (b.month ?? 99))
-    case 'titulo': return filtered.sort((a, b) => a.title.localeCompare(b.title, 'pt-BR'))
-    default: return filtered // 'recentes': mantém a ordem que veio do banco
+    case 'ano-desc':
+      return filtered.sort((a, b) => (b.year ?? 0) - (a.year ?? 0) || (b.month ?? 0) - (a.month ?? 0))
+    case 'ano-asc':
+      return filtered.sort((a, b) => (a.year ?? 9999) - (b.year ?? 9999) || (a.month ?? 99) - (b.month ?? 99))
+    case 'titulo':
+      return filtered.sort((a, b) => a.title.localeCompare(b.title, 'pt-BR'))
+    default:
+      return filtered // 'recentes': mantém a ordem que veio do banco
   }
 }

@@ -1,8 +1,9 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import type { Condition, Magazine } from '../types'
 import type { NewMagazine } from '../lib/magazineService'
 
 const MAX_COVER_MB = 5
+const COVER_TYPES = 'image/png,image/jpeg,image/webp,image/avif,image/gif' // os mesmos tipos aceitos pelo bucket
 
 interface MagazineFormProps {
   // O formulário não sabe SALVAR. Ele só avisa o pai: "o usuário quer adicionar isto".
@@ -21,7 +22,10 @@ export function MagazineForm({ onSubmit, initial, onCancel }: MagazineFormProps)
   const [year, setYear] = useState(initial?.year?.toString() ?? '')
   const [month, setMonth] = useState(initial?.month?.toString() ?? '')
   const [coverModel, setCoverModel] = useState(initial?.cover_model ?? '')
-  const [condition, setCondition] = useState<Condition>(initial?.condition ?? 'Bom')
+  const [issue, setIssue] = useState(initial?.issue ?? '')
+  const [notes, setNotes] = useState(initial?.notes ?? '')
+  // '' = condição não informada. Antes, abrir uma revista sem condição e salvar gravava 'Bom' sem ninguém pedir.
+  const [condition, setCondition] = useState<Condition | ''>(initial?.condition ?? '')
   const [acquired, setAcquired] = useState(initial?.acquired ?? true)
   const [isPublic, setIsPublic] = useState(initial?.is_public ?? true) // revista nova já entra no catálogo público
   const [cover, setCover] = useState<File | null>(null)
@@ -30,13 +34,22 @@ export function MagazineForm({ onSubmit, initial, onCancel }: MagazineFormProps)
   const [fileInputKey, setFileInputKey] = useState(0) // trocar a key "zera" o campo de arquivo
   const [saving, setSaving] = useState(false)
 
-  // Cria um endereço temporário para mostrar a imagem escolhida ANTES de enviar.
+  // Endereço temporário para mostrar a imagem escolhida ANTES de enviar.
+  // Fica num ref para podermos liberá-lo (revokeObjectURL) ao trocar de imagem e ao sair da tela.
+  const previewUrl = useRef<string | null>(null)
+
+  function pickCover(file: File | null) {
+    if (previewUrl.current) URL.revokeObjectURL(previewUrl.current)
+    previewUrl.current = file ? URL.createObjectURL(file) : null
+    setCover(file)
+    setPreview(previewUrl.current)
+  }
+
   useEffect(() => {
-    if (!cover) { setPreview(null); return }
-    const url = URL.createObjectURL(cover)
-    setPreview(url)
-    return () => URL.revokeObjectURL(url) // libera a memória quando trocar ou sair
-  }, [cover])
+    return () => {
+      if (previewUrl.current) URL.revokeObjectURL(previewUrl.current)
+    }
+  }, [])
 
   function handleCoverChange(event: React.ChangeEvent<HTMLInputElement>) {
     const file = event.target.files?.[0] ?? null
@@ -45,15 +58,15 @@ export function MagazineForm({ onSubmit, initial, onCancel }: MagazineFormProps)
     // Validação no navegador: dá resposta rápida, mas NÃO é segurança (o usuário pode burlar).
     if (file && !file.type.startsWith('image/')) {
       setCoverError('O arquivo precisa ser uma imagem.')
-      setCover(null)
+      pickCover(null)
       return
     }
     if (file && file.size > MAX_COVER_MB * 1024 * 1024) {
       setCoverError(`A imagem passa de ${MAX_COVER_MB} MB.`)
-      setCover(null)
+      pickCover(null)
       return
     }
-    setCover(file)
+    pickCover(file)
   }
 
   async function handleSubmit(event: React.FormEvent) {
@@ -71,7 +84,9 @@ export function MagazineForm({ onSubmit, initial, onCancel }: MagazineFormProps)
         // null (e não undefined) para o banco LIMPAR o campo ao editar:
         // undefined some do envio, e o valor antigo ficaria no banco.
         cover_model: coverModel.trim() || null,
-        condition,
+        issue: issue.trim() || null,
+        notes: notes.trim() || null,
+        condition: condition || null,
         acquired,
         is_public: isPublic,
       },
@@ -82,8 +97,10 @@ export function MagazineForm({ onSubmit, initial, onCancel }: MagazineFormProps)
     if (saved && !initial) {
       // limpa os campos para o próximo cadastro (se falhou, mantém: nada se perde)
       setTitle('')
+      setIssue('')
+      setNotes('')
       setCoverModel('')
-      setCover(null)
+      pickCover(null)
       setFileInputKey(fileInputKey + 1)
     }
   }
@@ -95,6 +112,11 @@ export function MagazineForm({ onSubmit, initial, onCancel }: MagazineFormProps)
       <label>
         Título
         <input value={title} onChange={(e) => setTitle(e.target.value)} />
+      </label>
+
+      <label>
+        Edição (opcional)
+        <input value={issue} onChange={(e) => setIssue(e.target.value)} placeholder="ex.: 293" />
       </label>
 
       <div className="form__row">
@@ -115,7 +137,7 @@ export function MagazineForm({ onSubmit, initial, onCancel }: MagazineFormProps)
 
       <label>
         Capa (imagem, até {MAX_COVER_MB} MB)
-        <input key={fileInputKey} type="file" accept="image/*" onChange={handleCoverChange} />
+        <input key={fileInputKey} type="file" accept={COVER_TYPES} onChange={handleCoverChange} />
       </label>
       {coverError && <p className="form__error">{coverError}</p>}
       {(preview ?? initial?.cover_image_url) && (
@@ -124,11 +146,19 @@ export function MagazineForm({ onSubmit, initial, onCancel }: MagazineFormProps)
 
       <label>
         Condição
-        <select value={condition} onChange={(e) => setCondition(e.target.value as Condition)}>
+        <select value={condition} onChange={(e) => setCondition(e.target.value as Condition | '')}>
+          <option value="">Não informada</option>
           {conditions.map((c) => (
-            <option key={c} value={c}>{c}</option>
+            <option key={c} value={c}>
+              {c}
+            </option>
           ))}
         </select>
+      </label>
+
+      <label>
+        Notas (opcional, privadas)
+        <textarea rows={3} value={notes} onChange={(e) => setNotes(e.target.value)} />
       </label>
 
       <label className="form__check">
@@ -141,8 +171,14 @@ export function MagazineForm({ onSubmit, initial, onCancel }: MagazineFormProps)
         Mostrar no catálogo público (visível para qualquer pessoa)
       </label>
 
-      <button type="submit" disabled={saving}>{saving ? 'Salvando...' : initial ? 'Salvar' : 'Adicionar'}</button>
-      {onCancel && <button type="button" onClick={onCancel}>Cancelar</button>}
+      <button type="submit" disabled={saving}>
+        {saving ? 'Salvando...' : initial ? 'Salvar' : 'Adicionar'}
+      </button>
+      {onCancel && (
+        <button type="button" onClick={onCancel}>
+          Cancelar
+        </button>
+      )}
     </form>
   )
 }

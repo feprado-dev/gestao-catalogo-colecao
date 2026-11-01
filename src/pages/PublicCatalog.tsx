@@ -5,6 +5,8 @@ import { MagazineGallery } from '../components/MagazineGallery'
 import { CoverLightbox } from '../components/CoverLightbox'
 import { ViewModeToggle } from '../components/ViewModeToggle'
 import { useViewMode } from '../hooks/useViewMode'
+import { LoadMore } from '../components/LoadMore'
+import { useVisibleCount } from '../hooks/useVisibleCount'
 import { listPublicMagazines } from '../lib/magazineService'
 import { applyFilters, defaultFilters, type Filters } from '../lib/filters'
 import { useDocumentTitle } from '../hooks/useDocumentTitle'
@@ -19,6 +21,7 @@ export function PublicCatalog() {
   const [viewMode, setViewMode] = useViewMode()
   const [zoomed, setZoomed] = useState<Magazine | null>(null) // capa aberta em tamanho grande
   const visibleMagazines = applyFilters(magazines, filters)
+  const [visibleCount, showMore] = useVisibleCount(filters)
 
   useEffect(() => {
     listPublicMagazines()
@@ -34,7 +37,9 @@ export function PublicCatalog() {
         <h1 className="sr-only">Catálogo público</h1>
       </header>
 
-      <p className="subtitle">{visibleMagazines.length} de {magazines.length} revistas públicas</p>
+      <p className="subtitle">
+        {visibleMagazines.length} de {magazines.length} revistas públicas
+      </p>
       {error && <p className="form__error">Erro: {error}</p>}
       <div className="toolbar">
         <CatalogFilters filters={filters} onChange={setFilters} showStatus={false} />
@@ -45,10 +50,20 @@ export function PublicCatalog() {
 
       <MagazineGallery mode={viewMode}>
         {/* sem onDelete nem onTogglePublic: o card aparece só para leitura */}
-        {visibleMagazines.map((m) => <MagazineCard key={m.id} magazine={m} onOpenCover={viewMode === 'mosaico' ? setZoomed : undefined} />)}
+        {visibleMagazines.slice(0, visibleCount).map((m) => (
+          <MagazineCard key={m.id} magazine={m} onOpenCover={viewMode === 'mosaico' ? setZoomed : undefined} />
+        ))}
       </MagazineGallery>
+      <LoadMore remaining={visibleMagazines.length - visibleCount} onClick={showMore} />
 
-      {zoomed && <CoverLightbox magazine={zoomed} magazines={visibleMagazines} onChange={setZoomed} onClose={() => setZoomed(null)} />}
+      {zoomed && (
+        <CoverLightbox
+          magazine={zoomed}
+          magazines={visibleMagazines}
+          onChange={setZoomed}
+          onClose={() => setZoomed(null)}
+        />
+      )}
     </div>
   )
 }

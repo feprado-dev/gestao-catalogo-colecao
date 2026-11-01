@@ -63,12 +63,7 @@ export async function removeCover(url: string): Promise<void> {
 
 // Atualiza só os campos enviados em "changes" e devolve a linha já atualizada.
 export async function updateMagazine(id: string, changes: Partial<NewMagazine>): Promise<Magazine> {
-  const { data, error } = await supabase
-    .from('magazines')
-    .update(changes)
-    .eq('id', id)
-    .select()
-    .single()
+  const { data, error } = await supabase.from('magazines').update(changes).eq('id', id).select().single()
 
   if (error) throw error
   return data
@@ -89,10 +84,7 @@ export async function deleteMagazine(magazine: Magazine): Promise<void> {
 // Lê da VIEW public_magazines, que não expõe user_id nem notas privadas.
 // (a view já filtra is_public = true, então não repetimos o filtro aqui)
 export async function listPublicMagazines(): Promise<Magazine[]> {
-  const { data, error } = await supabase
-    .from('public_magazines')
-    .select('*')
-    .order('created_at', { ascending: false })
+  const { data, error } = await supabase.from('public_magazines').select('*').order('created_at', { ascending: false })
 
   if (error) throw error
   return data

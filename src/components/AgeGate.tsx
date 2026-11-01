@@ -44,8 +44,12 @@ function AgeGateBox({ onConfirm }: { onConfirm: () => void }) {
           Este site exibe capas de revistas com nudez artística. O acesso é destinado a maiores de 18 anos.
         </p>
         <div className="dialog__actions">
-          <button autoFocus onClick={onConfirm}>Tenho 18 anos ou mais</button>
-          <a className="btn" href="https://www.google.com">Sair</a>
+          <button autoFocus onClick={onConfirm}>
+            Tenho 18 anos ou mais
+          </button>
+          <a className="btn" href="https://www.google.com">
+            Sair
+          </a>
         </div>
       </div>
     </div>

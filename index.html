@@ -9,8 +9,26 @@
     <link rel="icon" type="image/png" sizes="512x512" href="/icon-512.png" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>PLAYBOY</title>
-    <script>try{document.documentElement.dataset.theme=localStorage.getItem("tema")==="light"?"light":"dark"}catch(e){}</script>
+    <title>Vault Keeper</title>
+    <meta
+      name="description"
+      content="Catálogo pessoal para organizar e preservar uma coleção de revistas, edição por edição."
+    />
+    <!-- Projeto pessoal: pede aos buscadores para não listarem o site. -->
+    <meta name="robots" content="noindex, nofollow" />
+    <meta name="theme-color" content="#121216" />
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="pt_BR" />
+    <meta property="og:title" content="Vault Keeper" />
+    <meta
+      property="og:description"
+      content="Catálogo pessoal para organizar e preservar uma coleção de revistas, edição por edição."
+    />
+    <script>
+      try {
+        document.documentElement.dataset.theme = localStorage.getItem('tema') === 'light' ? 'light' : 'dark'
+      } catch (e) {}
+    </script>
   </head>
   <body>
     <div id="root"></div>

@@ -1,3 +1,16 @@
 {
-  "rewrites": [{ "source": "/(.*)", "destination": "/index.html" }]
+  "rewrites": [{ "source": "/((?!_vercel/).*)", "destination": "/index.html" }],
+  "images": {
+    "sizes": [200, 400, 800],
+    "qualities": [75],
+    "formats": ["image/webp"],
+    "minimumCacheTTL": 2592000,
+    "remotePatterns": [
+      {
+        "protocol": "https",
+        "hostname": "hqqnnxnbxqfocsmrovmw.supabase.co",
+        "pathname": "/storage/v1/object/public/magazine-covers/**"
+      }
+    ]
+  }
 }

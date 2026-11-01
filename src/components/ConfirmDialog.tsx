@@ -14,7 +14,9 @@ export function ConfirmDialog({ message, onConfirm, onCancel }: ConfirmDialogPro
       <p>{message}</p>
       <div className="dialog__actions">
         <button onClick={onCancel}>Cancelar</button>
-        <button className="dialog__danger" onClick={onConfirm}>Apagar</button>
+        <button className="dialog__danger" onClick={onConfirm}>
+          Apagar
+        </button>
       </div>
     </Modal>
   )

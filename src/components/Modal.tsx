@@ -22,7 +22,14 @@ export function Modal({ onClose, children }: ModalProps) {
   return (
     <div className="overlay" onClick={onClose}>
       {/* stopPropagation: clicar na caixa NÃO deve "vazar" para o fundo e fechar */}
-      <div className="dialog" role="dialog" aria-modal="true" tabIndex={-1} ref={dialogRef} onClick={(e) => e.stopPropagation()}>
+      <div
+        className="dialog"
+        role="dialog"
+        aria-modal="true"
+        tabIndex={-1}
+        ref={dialogRef}
+        onClick={(e) => e.stopPropagation()}
+      >
         {children}
       </div>
     </div>

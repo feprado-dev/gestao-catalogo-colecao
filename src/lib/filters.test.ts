@@ -78,10 +78,7 @@ describe('applyFilters', () => {
   })
 
   describe('filtro de status', () => {
-    const list = [
-      makeMagazine({ title: 'Tenho', acquired: true }),
-      makeMagazine({ title: 'Procuro', acquired: false }),
-    ]
+    const list = [makeMagazine({ title: 'Tenho', acquired: true }), makeMagazine({ title: 'Procuro', acquired: false })]
 
     it('"colecao" mostra só as que eu tenho', () => {
       expect(titles(applyFilters(list, filters({ status: 'colecao' })))).toEqual(['Tenho'])
@@ -124,7 +121,11 @@ describe('applyFilters', () => {
     })
 
     it('ordena títulos com acento corretamente (pt-BR)', () => {
-      const accents = [makeMagazine({ title: 'Zebra' }), makeMagazine({ title: 'Édice' }), makeMagazine({ title: 'Ave' })]
+      const accents = [
+        makeMagazine({ title: 'Zebra' }),
+        makeMagazine({ title: 'Édice' }),
+        makeMagazine({ title: 'Ave' }),
+      ]
       expect(titles(applyFilters(accents, filters({ sort: 'titulo' })))).toEqual(['Ave', 'Édice', 'Zebra'])
     })
   })

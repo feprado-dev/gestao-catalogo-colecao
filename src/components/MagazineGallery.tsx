@@ -44,11 +44,21 @@ export function MagazineGallery({ mode, children }: MagazineGalleryProps) {
   return (
     <div className="gallery gallery--horizontal">
       <div className="gallery__nav">
-        <button type="button" aria-label="Voltar" onClick={() => scrollByPage(-1)}>←</button>
-        <button type="button" aria-label="Avançar" onClick={() => scrollByPage(1)}>→</button>
+        <button type="button" aria-label="Voltar" onClick={() => scrollByPage(-1)}>
+          ←
+        </button>
+        <button type="button" aria-label="Avançar" onClick={() => scrollByPage(1)}>
+          →
+        </button>
       </div>
       {/* tabIndex=0: dá para focar com Tab e rolar com as setas do teclado */}
-      <div className="gallery__scroller" ref={scroller} tabIndex={0} role="region" aria-label="Capas, rolagem horizontal">
+      <div
+        className="gallery__scroller"
+        ref={scroller}
+        tabIndex={0}
+        role="region"
+        aria-label="Capas, rolagem horizontal"
+      >
         {children}
       </div>
     </div>

@@ -10,8 +10,8 @@ export function SiteFooter() {
         <Link to="/direitos-autorais">Direitos autorais</Link>
       </nav>
       <p>
-        {SITE.responsible}. Contato: <a href={`mailto:${SITE.contactEmail}`}>{SITE.contactEmail}</a>.
-        Sem vínculo com os titulares da marca e das capas exibidas.
+        {SITE.responsible}. Contato: <a href={`mailto:${SITE.contactEmail}`}>{SITE.contactEmail}</a>. Sem vínculo com os
+        titulares da marca e das capas exibidas.
       </p>
     </footer>
   )

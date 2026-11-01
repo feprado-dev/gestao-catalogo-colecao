@@ -1,6 +1,7 @@
 import { useEffect, useRef } from 'react'
 
-const FOCUSABLE = 'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])'
+const FOCUSABLE =
+  'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])'
 
 // "Prende" o foco do teclado dentro de uma janela: Tab no último elemento volta ao primeiro
 // (e Shift+Tab no primeiro vai ao último). Ao fechar, devolve o foco a quem o tinha antes.

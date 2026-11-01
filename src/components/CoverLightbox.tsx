@@ -49,7 +49,9 @@ export function CoverLightbox({ magazine, magazines, onChange, onClose }: CoverL
 
   if (!magazine.cover_image_url) return null
 
-  const date = magazine.year ? `${magazine.month ? `${String(magazine.month).padStart(2, '0')}/` : ''}${magazine.year}` : null
+  const date = magazine.year
+    ? `${magazine.month ? `${String(magazine.month).padStart(2, '0')}/` : ''}${magazine.year}`
+    : null
   const caption = [magazine.title, date].filter(Boolean).join(' · ')
 
   return (
@@ -61,7 +63,9 @@ export function CoverLightbox({ magazine, magazines, onChange, onClose }: CoverL
       aria-modal="true"
       aria-label={`Capa de ${magazine.title}`}
       onClick={onClose}
-      onTouchStart={(e) => { touchStartX.current = e.touches[0].clientX }}
+      onTouchStart={(e) => {
+        touchStartX.current = e.touches[0].clientX
+      }}
       onTouchEnd={handleTouchEnd}
     >
       {/* autoFocus: o foco do teclado vai para o botão de fechar ao abrir */}
@@ -74,7 +78,10 @@ export function CoverLightbox({ magazine, magazines, onChange, onClose }: CoverL
         className="lightbox__nav lightbox__nav--prev"
         aria-label="Capa anterior"
         disabled={!previous}
-        onClick={(e) => { e.stopPropagation(); if (previous) onChange(previous) }}
+        onClick={(e) => {
+          e.stopPropagation()
+          if (previous) onChange(previous)
+        }}
       >
         ‹
       </button>
@@ -82,7 +89,10 @@ export function CoverLightbox({ magazine, magazines, onChange, onClose }: CoverL
       <figure className="lightbox__figure" onClick={(e) => e.stopPropagation()}>
         <img className="lightbox__img" src={magazine.cover_image_url} alt={`Capa de ${magazine.title}`} />
         <figcaption className="lightbox__caption">
-          {caption} <span>{index + 1} / {withCover.length}</span>
+          {caption}{' '}
+          <span>
+            {index + 1} / {withCover.length}
+          </span>
         </figcaption>
       </figure>
 
@@ -91,7 +101,10 @@ export function CoverLightbox({ magazine, magazines, onChange, onClose }: CoverL
         className="lightbox__nav lightbox__nav--next"
         aria-label="Próxima capa"
         disabled={!next}
-        onClick={(e) => { e.stopPropagation(); if (next) onChange(next) }}
+        onClick={(e) => {
+          e.stopPropagation()
+          if (next) onChange(next)
+        }}
       >
         ›
       </button>

@@ -9,7 +9,9 @@ export function NotFound() {
         <p className="eyebrow">Erro 404</p>
         <h1>Página não encontrada</h1>
       </header>
-      <Link to="/" className="btn">Voltar ao início</Link>
+      <Link to="/" className="btn">
+        Voltar ao início
+      </Link>
     </div>
   )
 }

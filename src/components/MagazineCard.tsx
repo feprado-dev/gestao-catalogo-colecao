@@ -1,4 +1,5 @@
 import type { Magazine } from '../types'
+import { CoverImage } from './CoverImage'
 
 // "Props" são os dados que o componente recebe de fora.
 // Aqui, cada card recebe UMA revista e só se preocupa em mostrá-la.
@@ -24,14 +25,19 @@ export function MagazineCard({ magazine, onDelete, onEdit, onTogglePublic, onOpe
     <article className={magazine.acquired ? 'card' : 'card card--missing'}>
       <div className="card__media">
         {magazine.cover_image_url ? (
-          // loading="lazy": o navegador só baixa a imagem quando ela está perto de aparecer
+          // CoverImage: tamanho certo por tela + loading="lazy" (só baixa quando está perto de aparecer)
           onOpenCover ? (
             // <button>: dá para focar com Tab e abrir com Enter, não só com o mouse
-            <button type="button" className="card__zoom" aria-label={`Ver a capa inteira de ${magazine.title}`} onClick={() => onOpenCover(magazine)}>
-              <img className="card__cover" src={magazine.cover_image_url} alt="" loading="lazy" />
+            <button
+              type="button"
+              className="card__zoom"
+              aria-label={`Ver a capa inteira de ${magazine.title}`}
+              onClick={() => onOpenCover(magazine)}
+            >
+              <CoverImage url={magazine.cover_image_url} alt="" />
             </button>
           ) : (
-            <img className="card__cover" src={magazine.cover_image_url} alt={`Capa de ${magazine.title}`} loading="lazy" />
+            <CoverImage url={magazine.cover_image_url} alt={`Capa de ${magazine.title}`} />
           )
         ) : (
           <div className="card__placeholder">Sem capa</div>
@@ -55,10 +61,16 @@ export function MagazineCard({ magazine, onDelete, onEdit, onTogglePublic, onOpe
         {isOwnerView && (
           <div className="card__actions">
             {onTogglePublic && (
-              <button onClick={() => onTogglePublic(magazine)}>{magazine.is_public ? 'Tornar privada' : 'Tornar pública'}</button>
+              <button onClick={() => onTogglePublic(magazine)}>
+                {magazine.is_public ? 'Tornar privada' : 'Tornar pública'}
+              </button>
             )}
             {onEdit && <button onClick={() => onEdit(magazine)}>Editar</button>}
-            {onDelete && <button className="btn--danger" onClick={() => onDelete(magazine.id)}>Deletar</button>}
+            {onDelete && (
+              <button className="btn--danger" onClick={() => onDelete(magazine.id)}>
+                Deletar
+              </button>
+            )}
           </div>
         )}
       </div>

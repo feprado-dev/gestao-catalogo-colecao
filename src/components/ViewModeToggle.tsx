@@ -55,7 +55,15 @@ export function ViewModeToggle({ mode, onChange }: ViewModeToggleProps) {
           aria-pressed={mode === option}
           onClick={() => onChange(option)}
         >
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="1.7"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            aria-hidden="true"
+          >
             {ICONS[option]}
           </svg>
         </button>

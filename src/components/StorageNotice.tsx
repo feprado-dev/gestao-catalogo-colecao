@@ -30,10 +30,12 @@ export function StorageNotice() {
   return (
     <div className="storage-notice" role="region" aria-label="Aviso sobre dados no navegador">
       <p>
-        Este site não usa cookies de publicidade nem de rastreamento. Guardamos apenas preferências essenciais
-        (tema, modo de visualização, confirmação de idade). <Link to="/privacidade">Saiba mais</Link>.
+        Este site não usa cookies de publicidade nem de rastreamento. Guardamos apenas preferências essenciais (tema,
+        modo de visualização, confirmação de idade). <Link to="/privacidade">Saiba mais</Link>.
       </p>
-      <button type="button" onClick={dismiss}>Entendi</button>
+      <button type="button" onClick={dismiss}>
+        Entendi
+      </button>
     </div>
   )
 }

@@ -35,16 +35,29 @@ export function AuthForm() {
 
       <label>
         Senha
-        <input type="password" required autoComplete="current-password" value={password} onChange={(e) => setPassword(e.target.value)} />
+        <input
+          type="password"
+          required
+          autoComplete="current-password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+        />
       </label>
 
-      {message && <p className="form__error" role="alert">{message}</p>}
+      {message && (
+        <p className="form__error" role="alert">
+          {message}
+        </p>
+      )}
 
-      <button type="submit" disabled={busy}>{busy ? 'Aguarde...' : 'Entrar'}</button>
+      <button type="submit" disabled={busy}>
+        {busy ? 'Aguarde...' : 'Entrar'}
+      </button>
 
       {/* LGPD: diz para que serve o dado pedido, no momento em que ele é pedido */}
       <p className="form__note">
-        Usamos seu e-mail e senha apenas para autenticar o acesso. Veja a <Link to="/privacidade">Política de Privacidade</Link>.
+        Usamos seu e-mail e senha apenas para autenticar o acesso. Veja a{' '}
+        <Link to="/privacidade">Política de Privacidade</Link>.
       </p>
     </form>
   )
