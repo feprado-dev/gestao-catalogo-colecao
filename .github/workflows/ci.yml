@@ -1,0 +1,48 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  verificar:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - name: Formatação
+        run: npm run format:check
+      - name: Lint
+        run: npm run lint
+      - name: Tipos e build
+        run: npm run build
+        env:
+          # Chaves FALSAS: o build só precisa que existam. O app de verdade usa as da Vercel.
+          VITE_SUPABASE_URL: https://teste.supabase.co
+          VITE_SUPABASE_PUBLISHABLE_KEY: chave-publica-de-teste
+      - name: Testes unitários e de componente
+        run: npm test
+
+  e2e:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - run: npx playwright install --with-deps chromium
+      - name: Testes de ponta a ponta (Supabase simulado)
+        run: npm run test:e2e
+      - uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: playwright-trace
+          path: test-results
+          retention-days: 7
