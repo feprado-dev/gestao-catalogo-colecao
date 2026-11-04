@@ -3,7 +3,7 @@ import type { Condition, Magazine } from '../types'
 import type { NewMagazine } from '../lib/magazineService'
 
 const MAX_COVER_MB = 5
-const COVER_TYPES = 'image/png,image/jpeg,image/webp,image/avif,image/gif' // os mesmos tipos aceitos pelo bucket
+const COVER_TYPES = 'image/png,image/jpeg,image/webp,image/avif' // os mesmos tipos aceitos pelo bucket
 
 interface MagazineFormProps {
   // O formulário não sabe SALVAR. Ele só avisa o pai: "o usuário quer adicionar isto".

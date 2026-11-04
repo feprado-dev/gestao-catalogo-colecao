@@ -120,7 +120,7 @@ Para praticar back-end, estou refazendo a mesma API em **Java 17 e Spring Boot 3
 
 Gosto de deixar claro o que ainda não está pronto:
 
-- **Endurecimento do banco:** a migration `20261101100000_harden_rls_privileges_bucket.sql` (RLS otimizada, privilégios mínimos, limite do bucket, chave estrangeira) está escrita e revisada, mas **ainda não foi aplicada em produção**.
+- **Banco endurecido e versionado:** RLS otimizada, view `security_invoker` com permissões por coluna para o visitante, limite e tipos no bucket, chave estrangeira e índices, tudo em `supabase/migrations/` e já aplicado em produção. Pendente no painel do Supabase: proteção contra senhas vazadas e upgrade do Postgres.
 - **Verificação de idade:** o aviso 18+ é declaratório, sem verificação real.
 - **Direitos de terceiros:** as capas pertencem aos seus titulares. O projeto é pessoal, sem fins lucrativos, e tem canal de remoção.
 - **Monitoramento de erros:** há um `ErrorBoundary`, mas ainda sem serviço de monitoramento (por exemplo, Sentry).

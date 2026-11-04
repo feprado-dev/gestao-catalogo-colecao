@@ -140,7 +140,7 @@ export function BulkImport({ userId, existing, onImported }: BulkImportProps) {
         <input
           key={inputKey}
           type="file"
-          accept="image/png,image/jpeg,image/webp,image/avif,image/gif"
+          accept="image/png,image/jpeg,image/webp,image/avif"
           multiple
           disabled={running}
           onChange={handleFiles}
