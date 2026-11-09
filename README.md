@@ -19,7 +19,7 @@ Catálogo para organizar uma coleção de revistas, edição por edição: login
 | **O que é** | App web completo: front-end, banco, autenticação, armazenamento de imagens e deploy. |
 | **Meu papel** | Tudo: modelagem do banco, regras de segurança, interface, testes, acessibilidade, páginas legais e publicação. |
 | **Stack** | React 19, TypeScript, Vite, React Router, Supabase (Postgres, Auth, Storage), Vercel, GitHub Actions. |
-| **Qualidade** | 76 testes unitários e de componente, 3 testes de ponta a ponta, lint e formatação no CI. |
+| **Qualidade** | 80 testes unitários e de componente, 3 testes de ponta a ponta, lint e formatação no CI. |
 | **Para recrutadores** | Veja [Decisões técnicas](#decisões-técnicas) e [Limitações conhecidas](#limitações-conhecidas-e-próximos-passos): documentei o que ainda falta. |
 
 ## Funcionalidades
@@ -67,6 +67,7 @@ O acesso ao banco fica **todo em um arquivo** (`lib/magazineService.ts`). Nenhum
 - **TypeScript estrito.** Um exemplo real: o tipo dizia `year: number`, mas o banco tinha revistas sem ano. Corrigi para `number | null` e o compilador apontou todos os lugares sem tratamento.
 - **Lógica pura testada com TDD** (filtros e leitura do nome do arquivo), por render mais com menos esforço.
 - **Desempenho:** telas carregadas sob demanda (`React.lazy`), reduzindo o JavaScript inicial de 148 kB para 85 kB (gzip); miniaturas redimensionadas pela Vercel, com volta à imagem original se falhar.
+- **Cabeçalhos de segurança:** CSP sem scripts inline (o script do tema entra por hash SHA-256, conferido por teste), `nosniff`, `Referrer-Policy` e `Permissions-Policy`. O site só pode ser exibido dentro do meu portfólio (`frame-ancestors`).
 - **Privacidade por padrão:** fonte servida pelo próprio site (nenhum pedido sai para o Google), sem rastreadores, só `localStorage` essencial e aviso de armazenamento.
 - **CSS puro** com variáveis (tokens) e `[data-theme]`, para entender a base antes de usar uma biblioteca.
 
@@ -74,7 +75,7 @@ O acesso ao banco fica **todo em um arquivo** (`lib/magazineService.ts`). Nenhum
 
 | Área | O que existe |
 |---|---|
-| **Testes unitários e de componente** | 76 testes (Vitest + Testing Library): filtros, leitura de nomes de arquivo, contraste de cores, aviso 18+, modal, lightbox, formulário (com teste de regressão de um bug real) e paginação. |
+| **Testes unitários e de componente** | 80 testes (Vitest + Testing Library): filtros, leitura de nomes de arquivo, contraste de cores, aviso 18+, modal, lightbox, formulário (com teste de regressão de um bug real), paginação e a política de segurança (CSP). |
 | **Ponta a ponta** | 3 testes (Playwright) com o Supabase simulado: aviso 18+, mosaico, lightbox com teclado, "Mostrar mais" e páginas legais. Também verifica que nenhuma requisição sai para domínios de terceiros. |
 | **Acessibilidade** | Foco preso nas janelas, "pular para o conteúdo", `aria-label` nos controles só com ícone, títulos por página e **contraste WCAG AA verificado por teste automático**. Lighthouse da página inicial: 100 em acessibilidade. |
 | **CI** | GitHub Actions roda formatação (Prettier), lint (oxlint), TypeScript, build, testes e e2e a cada push e pull request. |
@@ -85,7 +86,7 @@ O acesso ao banco fica **todo em um arquivo** (`lib/magazineService.ts`). Nenhum
 Pré-requisitos: Node 24 e um projeto no [Supabase](https://supabase.com).
 
 ```bash
-git clone https://github.com/unknownit88/vault-keeper.git
+git clone https://github.com/feprado-dev/gestao-catalogo-colecao.git vault-keeper
 cd vault-keeper
 npm install
 ```
@@ -109,12 +110,12 @@ npm run build        # TypeScript + build de produção
 
 ## API em Java (projeto irmão)
 
-Para praticar back-end, estou refazendo a mesma API em **Java 17 e Spring Boot 3** (repositório local, ainda não publicado), reaproveitando o mesmo front-end:
+Para praticar back-end, refiz a mesma API em **Java 17 e Spring Boot 3**, reaproveitando o mesmo front-end. Código em **[feprado-dev/vault-keeper-api](https://github.com/feprado-dev/vault-keeper-api)**:
 
 - CRUD com DTOs (`record`), validação (`jakarta.validation`) e tratamento centralizado de erros.
 - Login com **JWT** (Spring Security, BCrypt) e CORS por configuração.
 - JPA/Hibernate sobre H2 nos testes e perfil para o Postgres do Supabase.
-- 20 testes automatizados (MockMvc e `@DataJpaTest`), incluindo isolamento entre usuários.
+- 41 testes automatizados (MockMvc e `@DataJpaTest`), incluindo isolamento entre usuários e envio de capas.
 
 ## Limitações conhecidas e próximos passos
 
@@ -124,7 +125,7 @@ Gosto de deixar claro o que ainda não está pronto:
 - **Verificação de idade:** o aviso 18+ é declaratório, sem verificação real.
 - **Direitos de terceiros:** as capas pertencem aos seus titulares. O projeto é pessoal, sem fins lucrativos, e tem canal de remoção.
 - **Monitoramento de erros:** há um `ErrorBoundary`, mas ainda sem serviço de monitoramento (por exemplo, Sentry).
-- **API Java:** o código está pronto para o Postgres do Supabase, mas ainda não foi ligada ao banco real nem publicada.
+- **API Java:** o código está no GitHub e pronto para o Postgres do Supabase, mas ainda não está hospedada (roda localmente).
 
 ## Material de estudos
 
@@ -135,4 +136,5 @@ Documentei tudo o que aprendi em [`estudos/`](estudos/): 19 capítulos, do JavaS
 Aberto a oportunidades de **estágio e vaga júnior em desenvolvimento**, com disponibilidade para viagens e mudança de cidade.
 
 - E-mail: ff.pradocarvalho@gmail.com
-- GitHub: [@unknownit88](https://github.com/unknownit88)
+- GitHub: [@feprado-dev](https://github.com/feprado-dev)
+- Portfólio: [felipepradowww.vercel.app](https://felipepradowww.vercel.app)
